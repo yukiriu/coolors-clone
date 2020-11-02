@@ -2,7 +2,7 @@
   <div class="h-screen font-bold text-2xl w-full" style="font-family: 'Inter'">
     <div class="flex fixed w-full bg-white">
       <button class="m-auto w-1/5" v-on:click="generateColors(colorQuantity)">
-        Generate{{ $route.params }}
+        Generaasdsadsaste{{ $route.params }}
       </button>
     </div>
     <div class="h-full flex color">

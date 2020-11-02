@@ -2,16 +2,23 @@
   <div class="h-screen font-bold text-2xl w-full" style="font-family: 'Inter'">
     <div class="flex fixed w-full bg-white">
       <button class="m-auto w-1/5" v-on:click="generateColors(colorQuantity)">
-        Generate{{ $route.params }}
-      </button>
+        Generate
+      </button><div class="hidden">{{$route.params}}</div>
     </div>
     <div class="h-full flex color">
-        <div 
-        v-for="colorHex in colors"
-        :key="colorHex"
-        :style="{'width': blockWidth}">
-          <color-block :color='colorHex'></color-block>
-        </div>
+      <div
+        v-for="color in colors"
+        :key="color.colorCode"
+        :locked="color.locked"
+        :style="{ width: blockWidth }"
+      >
+        <color-block
+          :color="color"
+          :index="colors.indexOf(color)"
+          v-on:togglelock="toggleLock"
+          v-on:deletecolor="deleteColor"
+        ></color-block>
+      </div>
     </div>
   </div>
 </template>
@@ -33,12 +40,25 @@ export default {
       return tinycolor.random().toString("hex");
     },
     generateColors: function (quantity) {
-      console.log(quantity)
       let path = "";
-      for(let i = 0; i < quantity; i++){
-        path = path + this.randomColor().slice(1) + "-";
+      for (let i = 0; i < quantity; i++) {
+        if (this.colors[i].locked) {
+          path =
+            path + this.colors[i].colorObject.toString("hex").slice(1) + "-";
+        } else {
+          path = path + this.randomColor().slice(1) + "-";
+        }
       }
-      path = path.slice(0,-1);
+      path = path.slice(0, -1);
+      this.$router.push(path);
+      this.checkParams();
+    },
+    updateUrl: function () {
+      let path = "";
+      for(let i = 0; i < this.colors.length; i++){
+        path = path + this.colors[i].colorObject.toString('hex').slice(1) + "-";
+      }
+      path = path.slice(0, -1);
       this.$router.push(path);
       this.checkParams();
     },
@@ -53,26 +73,47 @@ export default {
     checkParams: function () {
       if (this.$route.params.params) {
         let params = this.$route.params.params.replace(/-/g, "");
-        if (params.length % 6 == 0 && params.length != 6) {
-          if (colorRegex.test(params)) {
-              this.colors = [];
-            for (let i = 0; i < params.length / 6; i++) {
-              this.colors.push(params.slice(i * 6, (i + 1) * 6));
-              console.log(this.colors);
-            }
-            this.blockWidth = Math.floor(100 / this.colors.length) + 1 + "%";
-            this.colorQuantity = this.colors.length;
-          }
-        }
-        else if(params.length == 6 && colorRegex.test(params)){
-          this.component = "color";
-        }
-        else {
-          this.component = "error"
+        if (
+          params.length % 6 == 0 &&
+          params.length != 6 &&
+          colorRegex.test(params)
+        ) {
+          this.loadColors(this.$route.params.params.split("-"));
+          this.blockWidth = Math.floor(100 / this.colors.length) + 1 + "%";
+          this.colorQuantity = this.colors.length;
         }
       }
-      console.log(this.component)
     },
+    loadColors(array) {
+      if (array.length != this.colors.length) {
+        this.colors = [];
+        for (let i = 0; i < array.length; i++) {
+          this.colors.push({
+            colorObject: new tinycolor(array[i]),
+            locked: false,
+          });
+        }
+      } else {
+        for (let i = 0; i < array.length; i++) {
+          if (this.colors[i].colorObject.toString("hex").slice(1) != array[i]) {
+            this.colors[i] = {
+              colorObject: new tinycolor(array[i]),
+              locked: false,
+            };
+          }
+        }
+      }
+      console.log(this.colors);
+    },
+    toggleLock(index) {
+      this.colors[index].locked = !this.colors[index].locked;
+    },
+    deleteColor(index){
+      console.log("delete"+index);
+      this.quantity--
+      this.colors.splice(index,1);
+      this.updateUrl();
+    }
   },
   data() {
     return {
@@ -80,8 +121,9 @@ export default {
       active: false,
       component: "generate",
       blockWidth: "",
-      colorQuantity: 0 
+      colorQuantity: 0,
+      test: 0,
     };
-  }
+  },
 };
 </script>

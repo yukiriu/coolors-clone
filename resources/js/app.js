@@ -5,7 +5,7 @@ import VueRouter from 'vue-router'
 
 Vue.component('color-block', require('./components/ColorBlock.vue').default);
 Vue.component('core', require('./components/Core.vue').default);
-Vue.component('color', require('./components/color.vue').default);
+Vue.component('color-page', require('./components/Color.vue').default);
 Vue.component('home', require('./components/Home.vue').default);
 
 
