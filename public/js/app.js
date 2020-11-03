@@ -3216,6 +3216,50 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var tinycolor = __webpack_require__(/*! tinycolor2 */ "./node_modules/tinycolor2/tinycolor.js");
 
 var namer = __webpack_require__(/*! color-namer */ "./node_modules/color-namer/index.js");
@@ -3253,7 +3297,7 @@ var colorRegex = /^[A-fa-f0-9]{6,60}$/;
       var path = "";
 
       for (var i = 0; i < this.colors.length; i++) {
-        path = path + this.colors[i].colorObject.toString('hex').slice(1) + "-";
+        path = path + this.colors[i].colorObject.toString("hex").slice(1) + "-";
       }
 
       path = path.slice(0, -1);
@@ -3319,7 +3363,9 @@ var colorRegex = /^[A-fa-f0-9]{6,60}$/;
       component: "generate",
       blockWidth: "",
       colorQuantity: 0,
-      test: 0
+      test: 0,
+      activeRight: false,
+      activeLeft: false
     };
   }
 });
@@ -53446,6 +53492,7 @@ var render = function() {
           },
           [_vm._v("\n      Generate\n    ")]
         ),
+        _vm._v(" "),
         _c("div", { staticClass: "hidden" }, [
           _vm._v(_vm._s(_vm.$route.params))
         ])
@@ -53453,25 +53500,130 @@ var render = function() {
       _vm._v(" "),
       _c(
         "div",
-        { staticClass: "h-full flex color" },
-        _vm._l(_vm.colors, function(color) {
-          return _c(
+        { staticClass: "h-full flex" },
+        [
+          _c(
             "div",
             {
-              key: color.colorCode,
-              style: { width: _vm.blockWidth },
-              attrs: { locked: color.locked }
+              staticClass:
+                "h-full w-1/10 absolute flex flex-col justify-around",
+              class: {
+                "opacity-50": _vm.activeLeft,
+                "opacity-0": !_vm.activeLeft,
+                "text-white": _vm.colors[0].colorObject.isLight(),
+                "text-black": !_vm.colors[0].colorObject.isLight()
+              },
+              on: {
+                mouseenter: function($event) {
+                  _vm.activeLeft = !_vm.activeLeft
+                },
+                mouseleave: function($event) {
+                  _vm.activeLeft = !_vm.activeLeft
+                }
+              }
             },
             [
-              _c("color-block", {
-                attrs: { color: color, index: _vm.colors.indexOf(color) },
-                on: { togglelock: _vm.toggleLock, deletecolor: _vm.deleteColor }
-              })
-            ],
-            1
+              _c(
+                "svg",
+                {
+                  staticClass: "w-16 h-16 opacity-50 ml-4",
+                  attrs: {
+                    xmlns: "http://www.w3.org/2000/svg",
+                    fill: "none",
+                    viewBox: "0 0 24 24",
+                    stroke: "currentColor"
+                  }
+                },
+                [
+                  _c("path", {
+                    attrs: {
+                      "stroke-linecap": "round",
+                      "stroke-linejoin": "round",
+                      "stroke-width": "2",
+                      d:
+                        "M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                    }
+                  })
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _vm._l(_vm.colors, function(color) {
+            return _c(
+              "div",
+              {
+                key: color.colorCode,
+                style: { width: _vm.blockWidth },
+                attrs: { locked: color.locked }
+              },
+              [
+                _c("color-block", {
+                  attrs: { color: color, index: _vm.colors.indexOf(color) },
+                  on: {
+                    togglelock: _vm.toggleLock,
+                    deletecolor: _vm.deleteColor
+                  }
+                })
+              ],
+              1
+            )
+          }),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass:
+                "h-full w-1/10 absolute right-0 flex flex-col justify-around mr-4",
+              class: {
+                "opacity-50": _vm.activeRight,
+                "opacity-0": !_vm.activeRight
+              },
+              on: {
+                mouseenter: function($event) {
+                  _vm.activeRight = !_vm.activeRight
+                },
+                mouseleave: function($event) {
+                  _vm.activeRight = !_vm.activeRight
+                }
+              }
+            },
+            [
+              _c(
+                "svg",
+                {
+                  staticClass: "w-16 h-16 opacity-50",
+                  class: {
+                    "text-white": _vm.colors[
+                      _vm.colors.length - 1
+                    ].colorObject.isLight(),
+                    "text-black": !_vm.colors[
+                      _vm.colors.length - 1
+                    ].colorObject.isLight()
+                  },
+                  attrs: {
+                    xmlns: "http://www.w3.org/2000/svg",
+                    fill: "none",
+                    viewBox: "0 0 24 24",
+                    stroke: "currentColor"
+                  }
+                },
+                [
+                  _c("path", {
+                    attrs: {
+                      "stroke-linecap": "round",
+                      "stroke-linejoin": "round",
+                      "stroke-width": "2",
+                      d:
+                        "M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                    }
+                  })
+                ]
+              )
+            ]
           )
-        }),
-        0
+        ],
+        2
       )
     ]
   )

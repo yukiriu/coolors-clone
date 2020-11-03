@@ -3,9 +3,31 @@
     <div class="flex fixed w-full bg-white">
       <button class="m-auto w-1/5" v-on:click="generateColors(colorQuantity)">
         Generate
-      </button><div class="hidden">{{$route.params}}</div>
+      </button>
+      <div class="hidden">{{ $route.params }}</div>
     </div>
-    <div class="h-full flex color">
+    <div class="h-full flex">
+      <div
+        class="h-full w-1/10 absolute flex flex-col justify-around"
+        v-bind:class="{ 'opacity-50': activeLeft, 'opacity-0': !activeLeft, 'text-white' : colors[0].colorObject.isLight(), 'text-black' : !colors[0].colorObject.isLight()}"
+        v-on:mouseenter="activeLeft = !activeLeft"
+        v-on:mouseleave="activeLeft = !activeLeft"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          class="w-16 h-16 opacity-50 ml-4"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+      </div>
       <div
         v-for="color in colors"
         :key="color.colorCode"
@@ -18,6 +40,28 @@
           v-on:togglelock="toggleLock"
           v-on:deletecolor="deleteColor"
         ></color-block>
+      </div>
+      <div
+        class="h-full w-1/10 absolute right-0 flex flex-col justify-around mr-4"
+        v-bind:class="{ 'opacity-50': activeRight, 'opacity-0': !activeRight }"
+        v-on:mouseenter="activeRight = !activeRight"
+        v-on:mouseleave="activeRight = !activeRight"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          class="w-16 h-16 opacity-50"
+          v-bind:class="{'text-white' : colors[colors.length-1].colorObject.isLight(), 'text-black' : !colors[colors.length-1].colorObject.isLight()}"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
       </div>
     </div>
   </div>
@@ -55,8 +99,8 @@ export default {
     },
     updateUrl: function () {
       let path = "";
-      for(let i = 0; i < this.colors.length; i++){
-        path = path + this.colors[i].colorObject.toString('hex').slice(1) + "-";
+      for (let i = 0; i < this.colors.length; i++) {
+        path = path + this.colors[i].colorObject.toString("hex").slice(1) + "-";
       }
       path = path.slice(0, -1);
       this.$router.push(path);
@@ -108,12 +152,12 @@ export default {
     toggleLock(index) {
       this.colors[index].locked = !this.colors[index].locked;
     },
-    deleteColor(index){
-      console.log("delete"+index);
-      this.quantity--
-      this.colors.splice(index,1);
+    deleteColor(index) {
+      console.log("delete" + index);
+      this.quantity--;
+      this.colors.splice(index, 1);
       this.updateUrl();
-    }
+    },
   },
   data() {
     return {
@@ -123,6 +167,8 @@ export default {
       blockWidth: "",
       colorQuantity: 0,
       test: 0,
+      activeRight: false,
+      activeLeft: false,
     };
   },
 };
