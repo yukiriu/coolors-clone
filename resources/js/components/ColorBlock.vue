@@ -110,8 +110,8 @@
         v-if="!color.locked"
         class="h-6 w-6 m-auto my-3"
         v-bind:class="{
-          'hover:text-white': isLight,
-          'hover:text-black': !isLight,
+          'hover:text-white': !isLight,
+          'hover:text-black': isLight,
           'opacity-100': color.locked,
         }"
         @click="toggleLock"
@@ -151,7 +151,6 @@ import VueToastr from "@deveodk/vue-toastr";
 import "@deveodk/vue-toastr/dist/@deveodk/vue-toastr.css";
 export default {
   mounted() {
-    console.log("Component mounted.");
     this.isLight = this.color.colorObject.isLight();
   },
   props: ["color", "index"],
@@ -178,6 +177,7 @@ export default {
     },
     toggleLock() {
       this.$emit("togglelock", this.index);
+      this.$forceUpdate();
     },
     deleteColor() {
       this.$emit("deletecolor", this.index);
